@@ -43,10 +43,18 @@ prospectors.each do |prospector, configuration|
   end
 end
 
-powershell 'install filebeat as service' do
-  code "#{node['filebeat']['windows']['base_dir']}/filebeat-#{node['filebeat']['version']}-windows/install-service-filebeat.ps1"
-  only_if { node['platform'] == 'windows' }
-end
+#
+# SVDS do not deploy to windows machines, and this functionality suddenly started creating problems during deployment.
+# Simply, this script would try to execute the following 'powershell' command on ubuntu, and then it would obviously fail.
+# Maybe we should try to use 'https://github.com/vkhatri/chef-filebeat' instead ours, but I assume there must be a reason
+# Gary decided to fork it.
+# AnywayI am commenting out 'powershell' related lines for now.
+#   milenko, 2016-09-08
+
+#powershell 'install filebeat as service' do
+#  code "#{node['filebeat']['windows']['base_dir']}/filebeat-#{node['filebeat']['version']}-windows/install-service-filebeat.ps1"
+#  only_if { node['platform'] == 'windows' }
+#end
 
 ruby_block 'delay filebeat service start' do
   block do
